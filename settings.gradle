@@ -1,0 +1,6 @@
+rootProject.name = 'async-channels'
+include 'async-channels-core'
+include 'async-channels-tests'
+include 'async-channels-java'
+include 'async-channels-scala'
+

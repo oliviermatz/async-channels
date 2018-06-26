@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <bytecodeTargetLevel>
+      <module name="async-channels-core_main" target="1.8" />
+      <module name="async-channels-core_test" target="1.8" />
+      <module name="async-channels-java_main" target="1.8" />
+      <module name="async-channels-java_test" target="1.8" />
+      <module name="async-channels-scala_main" target="1.8" />
+      <module name="async-channels-scala_test" target="1.8" />
+      <module name="async-channels-tests_main" target="1.8" />
+      <module name="async-channels-tests_test" target="1.8" />
+      <module name="async-channels_main" target="1.8" />
+      <module name="async-channels_test" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

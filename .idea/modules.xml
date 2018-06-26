@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/async-channels.iml" filepath="$PROJECT_DIR$/.idea/async-channels.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/async-channels-core/async-channels-core.iml" filepath="$PROJECT_DIR$/.idea/modules/async-channels-core/async-channels-core.iml" group="async-channels-core" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/async-channels-core/async-channels-core_main.iml" filepath="$PROJECT_DIR$/.idea/modules/async-channels-core/async-channels-core_main.iml" group="async-channels-core" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/async-channels-core/async-channels-core_test.iml" filepath="$PROJECT_DIR$/.idea/modules/async-channels-core/async-channels-core_test.iml" group="async-channels-core" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/async-channels-java/async-channels-java.iml" filepath="$PROJECT_DIR$/.idea/modules/async-channels-java/async-channels-java.iml" group="async-channels-java" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/async-channels-java/async-channels-java_main.iml" filepath="$PROJECT_DIR$/.idea/modules/async-channels-java/async-channels-java_main.iml" group="async-channels-java" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/async-channels-java/async-channels-java_test.iml" filepath="$PROJECT_DIR$/.idea/modules/async-channels-java/async-channels-java_test.iml" group="async-channels-java" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/async-channels-scala/async-channels-scala.iml" filepath="$PROJECT_DIR$/.idea/modules/async-channels-scala/async-channels-scala.iml" group="async-channels-scala" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/async-channels-scala/async-channels-scala_main.iml" filepath="$PROJECT_DIR$/.idea/modules/async-channels-scala/async-channels-scala_main.iml" group="async-channels-scala" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/async-channels-scala/async-channels-scala_test.iml" filepath="$PROJECT_DIR$/.idea/modules/async-channels-scala/async-channels-scala_test.iml" group="async-channels-scala" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/async-channels-tests/async-channels-tests.iml" filepath="$PROJECT_DIR$/.idea/modules/async-channels-tests/async-channels-tests.iml" group="async-channels-tests" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/async-channels-tests/async-channels-tests_main.iml" filepath="$PROJECT_DIR$/.idea/modules/async-channels-tests/async-channels-tests_main.iml" group="async-channels-tests" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/async-channels-tests/async-channels-tests_test.iml" filepath="$PROJECT_DIR$/.idea/modules/async-channels-tests/async-channels-tests_test.iml" group="async-channels-tests" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/async-channels_main.iml" filepath="$PROJECT_DIR$/.idea/modules/async-channels_main.iml" group="async-channels" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/async-channels_test.iml" filepath="$PROJECT_DIR$/.idea/modules/async-channels_test.iml" group="async-channels" />
+    </modules>
+  </component>
+</project>

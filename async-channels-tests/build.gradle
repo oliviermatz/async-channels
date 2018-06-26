@@ -1,0 +1,26 @@
+plugins {
+    id 'java'
+    id 'scala'
+}
+
+group 'io.github.matzoliv'
+version '0.1.0-alpha'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.scala-lang:scala-library:2.12.4'
+    implementation project(":async-channels-core")
+    implementation project(":async-channels-java")
+    implementation project(":async-channels-scala")
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile 'org.scalatest:scalatest_2.12:3.0.5'
+}
+
+test {
+   maxParallelForks = 1
+}
