@@ -10,23 +10,17 @@ package io.github.matzoliv.asyncchannel.implementation;
 
 import java.util.function.Consumer;
 
-public class CommitResultPairWithValue {
-    private Consumer<Object> left;
-    private Consumer<Object> right;
+public class PutCallbackWithValue {
+    private Consumer<Object> putCallback;
     private Object value;
 
-    public CommitResultPairWithValue(Consumer<Object> left, Consumer<Object> right, Object value) {
-        this.left = left;
-        this.right = right;
+    public PutCallbackWithValue(Consumer<Object> right, Object value) {
+        this.putCallback = right;
         this.value = value;
     }
 
-    public Consumer<Object> getLeft() {
-        return left;
-    }
-
-    public Consumer<Object> getRight() {
-        return right;
+    public Consumer<Object> getPutCallback() {
+        return putCallback;
     }
 
     public Object getValue() {

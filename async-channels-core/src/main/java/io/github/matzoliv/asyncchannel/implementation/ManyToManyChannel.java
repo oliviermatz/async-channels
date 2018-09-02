@@ -90,7 +90,7 @@ public class ManyToManyChannel implements Channel {
         cleanup();
         if (isClosed) {
             lock.unlock();
-            return PutCancelled.value;
+            return PutFailed.value;
         } else {
             if (!buffer.isFull() && !takes.isEmpty()) {
                 handler.lock();
@@ -123,22 +123,23 @@ public class ManyToManyChannel implements Channel {
                     for (Runnable r : takeCallbacks) {
                         r.run();
                     }
+
+                    return PutSucceeded.value;
                 } else {
                     lock.unlock();
+                    return PutCancelled.value;
                 }
-
-                return new PutSucceeded();
             } else {
-                // Buffer is full and takers are parked: unbuffered channel case.
+                // Buffer is full and takers are parked (unbuffered channel case).
                 // Try to find an available parked taker to match with the putter.
                 Iterator<Handler> it = takes.iterator();
 
-                CommitResultPairWithValue result = null;
+                Runnable result = null;
                 while (it.hasNext()) {
                     Handler takeHandler = it.next();
 
-                    // We must lock both the taker and the putter: do it in a predictable
-                    // order to avoid deadlocks.
+                    // We must lock both the taker and the putter to commit then at the same time.
+                    // Do it in a predictable order to avoid deadlocks.
                     if (handler.getLockId() < takeHandler.getLockId()) {
                         handler.lock();
                         takeHandler.lock();
@@ -148,7 +149,8 @@ public class ManyToManyChannel implements Channel {
                     }
 
                     if (handler.isActive() && takeHandler.isActive()) {
-                        result = new CommitResultPairWithValue(handler.commit(), takeHandler.commit(), null);
+                        Consumer<Object> takeConsumer = takeHandler.commit();
+                        result = () -> takeConsumer.accept(value);
                     }
 
                     handler.unlock();
@@ -163,8 +165,8 @@ public class ManyToManyChannel implements Channel {
                 if (result != null) {
                     // We found a taker, schedule it and acknowledge the put.
                     lock.unlock();
-                    result.getRight().accept(value);
-                    return new PutSucceeded();
+                    result.run();
+                    return PutSucceeded.value;
                 } else {
                     if (!buffer.isFull()) {
                         // No taker, and the buffer has available space:
@@ -201,7 +203,7 @@ public class ManyToManyChannel implements Channel {
 
     @Override
     public ReadPort putAlts(Object value) {
-        return new AltReadPort(this, value);
+        return new AltWritePortWrapper(this, value);
     }
 
     @Override
@@ -221,8 +223,8 @@ public class ManyToManyChannel implements Channel {
 
                 // Because we just consumed a value from the queue, we must schedule
                 // active parked putters & enqueue their values until the buffer is full.
-                // (We don't assume that one value dequeued will leave exactly one available
-                // spot in the queue).
+                // Note that we can't predict how many putters can be unparked from the single
+                // .dequeue() call.
                 LinkedList<Consumer<Object>> putterConsumers = new LinkedList<>();
                 while (!buffer.isFull() && it.hasNext()) {
                     Putter putter = it.next();
@@ -253,13 +255,13 @@ public class ManyToManyChannel implements Channel {
             // (Usually happens in the non-buffered channel case).
             Iterator<Putter> it = puts.iterator();
 
-            CommitResultPairWithValue result = null;
+            PutCallbackWithValue result = null;
             while (result == null && it.hasNext()) {
                 Putter putter = it.next();
                 Handler putterHandler = putter.getHandler();
 
-                // We must lock both the taker and the putter: do it in a predictable
-                // order to avoid deadlocks.
+                // We must lock both the taker and the putter to commit then at the same time.
+                // Do it in a predictable order to avoid deadlocks.
                 if (handler.getLockId() < putterHandler.getLockId()) {
                     handler.lock();
                     putterHandler.lock();
@@ -269,22 +271,20 @@ public class ManyToManyChannel implements Channel {
                 }
 
                 if (handler.isActive() && putterHandler.isActive()) {
-                    result = new CommitResultPairWithValue(handler.commit(), putterHandler.commit(), putter.getValue());
+                    result = new PutCallbackWithValue(putterHandler.commit(), putter.getValue());
                 }
 
                 handler.unlock();
                 putterHandler.unlock();
 
-                if (result != null) {
-                    it.remove();
-                } else if (!putterHandler.isActive()) {
+                if (result != null || !putterHandler.isActive()) {
                     it.remove();
                 }
             }
 
             if (result != null) {
                 lock.unlock();
-                result.getRight().accept(null);
+                result.getPutCallback().accept(null);
                 return new TakeSucceeded(result.getValue());
             } else {
                 if (isClosed) {

@@ -97,6 +97,33 @@ public class PutRead {
         Assert.assertEquals(c1.poll(), null);
     }
 
+    @Test
+    public void testReadClosedChannelReturnsNull() throws InterruptedException, ExecutionException, TimeoutException {
+        AsyncChannel c1 = Channels.create();
+        c1.close();
+        Assert.assertNull(c1.readAsync().get(10, TimeUnit.MILLISECONDS));
+    }
+
+    @Test
+    public void testPutClosedChannel() throws InterruptedException, ExecutionException, TimeoutException {
+        AsyncChannel c1 = Channels.create();
+        c1.close();
+        Assert.assertNull(c1.putAsync(new Integer(10)).get(10, TimeUnit.MILLISECONDS));
+    }
+
+    @Test
+    public void testParkedPutAndCloseChannel() throws InterruptedException, ExecutionException, TimeoutException {
+        AsyncChannel c1 = Channels.create();
+        CompletableFuture<Void> putFuture = c1.putAsync(new Integer(10));
+        c1.close();
+        Assert.assertFalse(putFuture.isDone());
+        Assert.assertEquals(c1.poll(), new Integer(10));
+        Assert.assertNull(putFuture.get(100, TimeUnit.MILLISECONDS));
+        Assert.assertTrue(putFuture.isDone());
+        Assert.assertEquals(c1.poll(), null);
+    }
+
+    /*
     public CompletableFuture<Void> pingPongLoop(String id, AsyncChannel in, AsyncChannel out) {
         return in.readAsync()
                 .thenComposeAsync(msg -> {
@@ -117,4 +144,5 @@ public class PutRead {
                 c1.putAsync("pingPong")
         ).get(120, TimeUnit.SECONDS);
     }
+    */
 }

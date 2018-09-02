@@ -11,12 +11,12 @@ package io.github.matzoliv.asyncchannel.implementation;
 import io.github.matzoliv.asyncchannel.*;
 import io.github.matzoliv.asyncchannel.implementation.results.*;
 
-public class AltReadPort implements ReadPort {
+public class AltWritePortWrapper implements ReadPort {
 
     private WritePort writePort;
     private Object value;
 
-    public AltReadPort(WritePort writePort, Object value)  {
+    public AltWritePortWrapper(WritePort writePort, Object value)  {
         this.writePort = writePort;
         this.value = value;
     }
