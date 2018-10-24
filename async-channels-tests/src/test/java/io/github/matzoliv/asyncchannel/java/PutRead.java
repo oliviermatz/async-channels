@@ -13,6 +13,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class PutRead {
     @Test
@@ -123,14 +124,23 @@ public class PutRead {
         Assert.assertEquals(c1.poll(), null);
     }
 
-    /*
-    public CompletableFuture<Void> pingPongLoop(String id, AsyncChannel in, AsyncChannel out) {
+    public CompletableFuture<Void> pingPongLoop(String id, AsyncChannel in, AsyncChannel out, AtomicInteger totalOpCounter) {
         return in.readAsync()
                 .thenComposeAsync(msg -> {
-                    System.out.println(String.format("Task %s: received %s", id, msg));
-                    return out.putAsync(msg);
-                })
-                .thenComposeAsync((Void x) -> pingPongLoop(id, in, out));
+                    Integer n = (Integer)msg;
+                    totalOpCounter.incrementAndGet();
+                    if (n > 1) {
+                        return out.putAsync(n - 1).thenComposeAsync((Void x) -> {
+                            if (n > 2) {
+                                return pingPongLoop(id, in, out, totalOpCounter);
+                            } else {
+                                return CompletableFuture.completedFuture(null);
+                            }
+                        });
+                    } else {
+                        return CompletableFuture.completedFuture(null);
+                    }
+                });
     }
 
     @Test
@@ -138,11 +148,14 @@ public class PutRead {
         AsyncChannel c1 = Channels.create();
         AsyncChannel c2 = Channels.create();
 
+        AtomicInteger totalOpCounter = new AtomicInteger(0);
+
         CompletableFuture.allOf(
-                pingPongLoop("A", c1, c2),
-                pingPongLoop("B", c2, c1),
-                c1.putAsync("pingPong")
+                pingPongLoop("A", c1, c2, totalOpCounter),
+                pingPongLoop("B", c2, c1, totalOpCounter),
+                c1.putAsync(new Integer(1000))
         ).get(120, TimeUnit.SECONDS);
+
+        Assert.assertEquals(1000, totalOpCounter.get());
     }
-    */
 }
