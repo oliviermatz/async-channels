@@ -25,10 +25,10 @@ public class AsyncReadPortImpl implements AsyncReadPort {
         CompletableFuture<Object> future = new CompletableFuture<>();
         Handler handler = new ConsumerHandler(x -> future.complete(x));
         TakeResult result = take(handler);
-        if (result instanceof TakeSucceeded) {
-            return CompletableFuture.completedFuture(((TakeSucceeded) result).getResult());
-        } else {
+        if (result instanceof TakeParked) {
             return future;
+        } else {
+            return CompletableFuture.completedFuture(((TakeSucceeded) result).getResult());
         }
     }
 

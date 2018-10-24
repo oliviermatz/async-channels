@@ -27,10 +27,10 @@ public class AsyncWritePortImpl implements AsyncWritePort {
         CompletableFuture<Void> future = new CompletableFuture<>();
         Handler handler = new ConsumerHandler(x -> future.complete(null));
         PutResult result = put(value, handler);
-        if (result instanceof PutSucceeded) {
-            return CompletableFuture.completedFuture(null);
-        } else {
+        if (result instanceof PutParked) {
             return future;
+        } else {
+            return CompletableFuture.completedFuture(null);
         }
     }
 
