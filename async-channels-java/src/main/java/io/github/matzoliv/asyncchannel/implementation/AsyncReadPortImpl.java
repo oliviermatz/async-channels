@@ -23,7 +23,7 @@ public class AsyncReadPortImpl implements AsyncReadPort {
     @Override
     public CompletableFuture<Object> readAsync() {
         CompletableFuture<Object> future = new CompletableFuture<>();
-        Handler handler = new ConsumerHandler(x -> future.complete(x));
+        Handler<Object> handler = new ConsumerHandler<>(future::complete);
         TakeResult result = take(handler);
         if (result instanceof TakeParked) {
             return future;
@@ -34,7 +34,7 @@ public class AsyncReadPortImpl implements AsyncReadPort {
 
     @Override
     public Object poll() {
-        Handler handler = new ConsumerHandler(x -> {}, false);
+        Handler<Object> handler = new ConsumerHandler<>(x -> {}, false);
         TakeResult result = take(handler);
         if (result instanceof TakeSucceeded) {
             return ((TakeSucceeded) result).getResult();
@@ -44,7 +44,7 @@ public class AsyncReadPortImpl implements AsyncReadPort {
     }
 
     @Override
-    public TakeResult take(Handler handler) {
+    public TakeResult take(Handler<Object> handler) {
         return underlying.take(handler);
     }
 }

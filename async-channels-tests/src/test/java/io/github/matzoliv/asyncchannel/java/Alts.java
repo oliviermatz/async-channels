@@ -21,14 +21,14 @@ public class Alts {
         AsyncChannel c1 = Channels.create();
         AsyncChannel c2 = Channels.create();
 
-        CompletableFuture<Choice2<Object, Object>> future = Channels.alts(
-            new ReadPortAndWrapper(c1, x -> new Choice1Of2(x)),
-            new ReadPortAndWrapper(c2, x -> new Choice2Of2(x))
+        CompletableFuture future = Channels.alts(
+                new ReadPortAndWrapper(c1, Choice1Of2::new),
+                new ReadPortAndWrapper(c2, Choice2Of2::new)
         );
 
         c1.putAsync("hello1");
 
-        Choice2<Object, Object> result = future.get();
+        Choice2<Object, Object> result = (Choice2<Object, Object>)future.get();
 
         Assert.assertTrue(result instanceof Choice1Of2);
     }
@@ -38,14 +38,14 @@ public class Alts {
         AsyncChannel c1 = Channels.create();
         AsyncChannel c2 = Channels.create();
 
-        CompletableFuture<Choice2<Object, Object>> future = Channels.alts(
-            new ReadPortAndWrapper(c1, x -> new Choice1Of2(x)),
-            new ReadPortAndWrapper(c2, x -> new Choice2Of2(x))
+        CompletableFuture future = Channels.alts(
+                new ReadPortAndWrapper(c1, Choice1Of2::new),
+                new ReadPortAndWrapper(c2, Choice2Of2::new)
         );
 
         c2.putAsync("hello1");
 
-        Choice2<Object, Object> result = future.get();
+        Choice2<Object, Object> result = (Choice2<Object, Object>)future.get();
 
         Assert.assertTrue(result instanceof Choice2Of2);
     }
@@ -57,12 +57,12 @@ public class Alts {
 
         c1.putAsync("hello1");
 
-        CompletableFuture<Choice2<Object, Object>> future = Channels.alts(
-            new ReadPortAndWrapper(c1, x -> new Choice1Of2(x)),
-            new ReadPortAndWrapper(c2, x -> new Choice2Of2(x))
+        CompletableFuture future = Channels.alts(
+                new ReadPortAndWrapper(c1, Choice1Of2::new),
+                new ReadPortAndWrapper(c2, Choice2Of2::new)
         );
 
-        Choice2<Object, Object> result = future.get();
+        Choice2<Object, Object> result = (Choice2<Object, Object>)future.get();
         Assert.assertTrue(result instanceof Choice1Of2);
     }
 
@@ -73,12 +73,12 @@ public class Alts {
 
         c2.putAsync("hello1");
 
-        CompletableFuture<Choice2<Object, Object>> future = Channels.alts(
-            new ReadPortAndWrapper(c1, x -> new Choice1Of2(x)),
-            new ReadPortAndWrapper(c2, x -> new Choice2Of2(x))
+        CompletableFuture future = Channels.alts(
+                new ReadPortAndWrapper(c1, Choice1Of2::new),
+                new ReadPortAndWrapper(c2, Choice2Of2::new)
         );
 
-        Choice2<Object, Object> result = future.get();
+        Choice2<Object, Object> result = (Choice2<Object, Object>)future.get();
         Assert.assertTrue(result instanceof Choice2Of2);
     }
 
@@ -87,14 +87,14 @@ public class Alts {
         AsyncChannel c1 = Channels.create(10);
         AsyncChannel c2 = Channels.create(10);
 
-        CompletableFuture<Choice2<Object, Object>> future = Channels.alts(
-            new ReadPortAndWrapper(c1, x -> new Choice1Of2(x)),
-            new ReadPortAndWrapper(c2, x -> new Choice2Of2(x))
+        CompletableFuture future = Channels.alts(
+                new ReadPortAndWrapper(c1, Choice1Of2::new),
+                new ReadPortAndWrapper(c2, Choice2Of2::new)
         );
 
         c1.putAsync("hello1");
 
-        Choice2<Object, Object> result = future.get();
+        Choice2<Object, Object> result = (Choice2<Object, Object>)future.get();
 
         Assert.assertTrue(result instanceof Choice1Of2);
     }
@@ -104,14 +104,14 @@ public class Alts {
         AsyncChannel c1 = Channels.create(10);
         AsyncChannel c2 = Channels.create(10);
 
-        CompletableFuture<Choice2<Object, Object>> future = Channels.alts(
-            new ReadPortAndWrapper(c1, x -> new Choice1Of2(x)),
-            new ReadPortAndWrapper(c2, x -> new Choice2Of2(x))
+        CompletableFuture future = Channels.alts(
+                new ReadPortAndWrapper(c1, Choice1Of2::new),
+                new ReadPortAndWrapper(c2, Choice2Of2::new)
         );
 
         c2.putAsync("hello1");
 
-        Choice2<Object, Object> result = future.get();
+        Choice2<Object, Object> result = (Choice2<Object, Object>)future.get();
 
         Assert.assertTrue(result instanceof Choice2Of2);
     }
@@ -123,12 +123,12 @@ public class Alts {
 
         c1.putAsync("hello1");
 
-        CompletableFuture<Choice2<Object, Object>> future = Channels.alts(
-            new ReadPortAndWrapper(c1, x -> new Choice1Of2(x)),
-            new ReadPortAndWrapper(c2, x -> new Choice2Of2(x))
+        CompletableFuture future = Channels.alts(
+                new ReadPortAndWrapper(c1, Choice1Of2::new),
+                new ReadPortAndWrapper(c2, Choice2Of2::new)
         );
 
-        Choice2<Object, Object> result = future.get();
+        Choice2<Object, Object> result = (Choice2<Object, Object>)future.get();
         Assert.assertTrue(result instanceof Choice1Of2);
     }
 
@@ -139,12 +139,12 @@ public class Alts {
 
         c2.putAsync("hello1");
 
-        CompletableFuture<Choice2<Object, Object>> future = Channels.alts(
-            new ReadPortAndWrapper(c1, x -> new Choice1Of2(x)),
-            new ReadPortAndWrapper(c2, x -> new Choice2Of2(x))
+        CompletableFuture future = Channels.alts(
+                new ReadPortAndWrapper(c1, Choice1Of2::new),
+                new ReadPortAndWrapper(c2, Choice2Of2::new)
         );
 
-        Choice2<Object, Object> result = future.get();
+        Choice2<Object, Object> result = (Choice2<Object, Object>)future.get();
         Assert.assertTrue(result instanceof Choice2Of2);
     }
 }

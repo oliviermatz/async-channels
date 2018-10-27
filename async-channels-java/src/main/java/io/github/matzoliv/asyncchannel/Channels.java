@@ -36,14 +36,14 @@ public class Channels {
     }
 
     public static CompletableFuture alts(ReadPortAndWrapper... portsAndWrapper) {
-        CompletableFuture future = new CompletableFuture<>();
+        CompletableFuture<Object> future = new CompletableFuture<>();
 
         for (ReadPortAndWrapper x : portsAndWrapper) {
             ReadPort port = x.getReadPort();
             Function<Object, Object> wrapper = x.getWrapper();
 
-            Handler handler = new ConsumerHandler(arg -> {});
-            TakeResult result = port.take(new AltHandler(handler, arg -> future.complete(wrapper.apply(arg))));
+            Handler<Object> handler = new ConsumerHandler<>(arg -> {});
+            TakeResult result = port.take(new AltHandler<>(handler, arg -> future.complete(wrapper.apply(arg))));
 
             if (result instanceof TakeSucceeded) {
                 return CompletableFuture.completedFuture(wrapper.apply(((TakeSucceeded) result).getResult()));

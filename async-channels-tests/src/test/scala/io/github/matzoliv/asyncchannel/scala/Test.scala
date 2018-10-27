@@ -17,7 +17,7 @@ object Test {
       _ <- if (loopLeft > 0) {
         loop(id, loopLeft - 1, in, out)
       } else {
-        Future()
+        Future.unit
       }
     } yield ()
 

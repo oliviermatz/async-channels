@@ -13,11 +13,11 @@ import java.util.Queue;
 
 public class QueueBuffer implements Buffer {
     private int maxSize;
-    private Queue queue;
+    private Queue<Object> queue;
 
     public QueueBuffer(int maxSize) {
         this.maxSize = maxSize;
-        this.queue = new LinkedList();
+        this.queue = new LinkedList<>();
     }
 
     @Override

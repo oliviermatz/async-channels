@@ -11,7 +11,7 @@ package io.github.matzoliv.asyncchannel.implementation;
 import io.github.matzoliv.asyncchannel.Handler;
 
 public class Putter {
-    public Putter(Object value, Handler handler) {
+    public Putter(Object value, Handler<Object> handler) {
         this.value = value;
         this.handler = handler;
     }
@@ -20,10 +20,10 @@ public class Putter {
         return value;
     }
 
-    public Handler getHandler() {
+    public Handler<Object> getHandler() {
         return handler;
     }
 
     private Object value;
-    private Handler handler;
+    private Handler<Object> handler;
 }

@@ -8,12 +8,10 @@
 
 package io.github.matzoliv.asyncchannel.implementation;
 
+import java.util.concurrent.CompletableFuture;
+
 import io.github.matzoliv.asyncchannel.*;
 import io.github.matzoliv.asyncchannel.implementation.results.*;
-
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ForkJoinPool;
 
 public class AsyncWritePortImpl implements AsyncWritePort {
     private WritePort underlying;
@@ -25,7 +23,7 @@ public class AsyncWritePortImpl implements AsyncWritePort {
     @Override
     public CompletableFuture<Void> putAsync(Object value) {
         CompletableFuture<Void> future = new CompletableFuture<>();
-        Handler handler = new ConsumerHandler(x -> future.complete(null));
+        Handler<Object> handler = new ConsumerHandler<>(x -> future.complete(null));
         PutResult result = put(value, handler);
         if (result instanceof PutParked) {
             return future;
@@ -36,13 +34,13 @@ public class AsyncWritePortImpl implements AsyncWritePort {
 
     @Override
     public boolean offer(Object value) {
-        Handler handler = new ConsumerHandler(x -> {}, false);
+        Handler<Object> handler = new ConsumerHandler<>(x -> {}, false);
         PutResult result = put(value, handler);
         return (result instanceof PutSucceeded);
     }
 
     @Override
-    public PutResult put(Object value, Handler handler) {
+    public PutResult put(Object value, Handler<Object> handler) {
         return underlying.put(value, handler);
     }
 

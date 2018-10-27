@@ -14,7 +14,7 @@ public class Executors {
     @Test
     public void testPutContinuationInSameThread() throws InterruptedException, ExecutionException, TimeoutException {
         AsyncChannel c = Channels.create();
-        ThreadLocal threadLocal = new ThreadLocal<String>();
+        ThreadLocal<String> threadLocal = new ThreadLocal<>();
         threadLocal.set("testThread");
 
         CompletableFuture<Object> putFuture = c.putAsync("hello1").thenApply(v ->
@@ -22,7 +22,7 @@ public class Executors {
         );
 
         threadLocal.set("beforeReadAsync");
-        CompletableFuture<Object> readFuture = c.readAsync();
+        c.readAsync();
         threadLocal.set("afterReadAsync");
 
         String result = (String)putFuture.get(1, TimeUnit.SECONDS);
@@ -32,7 +32,7 @@ public class Executors {
     @Test
     public void testPutAsyncContinuationYields() throws InterruptedException, ExecutionException, TimeoutException {
         AsyncChannel c = Channels.create();
-        ThreadLocal threadLocal = new ThreadLocal<String>();
+        ThreadLocal<String> threadLocal = new ThreadLocal<>();
         threadLocal.set("testThread");
 
         CompletableFuture<Object> putFuture = c.putAsync("hello1").thenApplyAsync(v ->
@@ -40,17 +40,17 @@ public class Executors {
         );
 
         threadLocal.set("beforeReadAsync");
-        CompletableFuture<Object> readFuture = c.readAsync();
+        c.readAsync();
         threadLocal.set("afterReadAsync");
 
         String result = (String)putFuture.get(1, TimeUnit.SECONDS);
-        Assert.assertEquals(result, null);
+        Assert.assertNull(result);
     }
 
     @Test
     public void testReadContinuationInSameThread() throws InterruptedException, ExecutionException, TimeoutException {
         AsyncChannel c = Channels.create();
-        ThreadLocal threadLocal = new ThreadLocal<String>();
+        ThreadLocal<String> threadLocal = new ThreadLocal<>();
         threadLocal.set("testThread");
 
         CompletableFuture<Object> readFuture = c.readAsync().thenApply(x ->
@@ -58,7 +58,7 @@ public class Executors {
         );
 
         threadLocal.set("beforeReadAsync");
-        CompletableFuture<Void> putFuture = c.putAsync("hello");
+        c.putAsync("hello");
         threadLocal.set("afterReadAsync");
 
         String result = (String)readFuture.get(1, TimeUnit.SECONDS);
@@ -68,7 +68,7 @@ public class Executors {
     @Test
     public void testReadAsyncContinuationYields() throws InterruptedException, ExecutionException, TimeoutException {
         AsyncChannel c = Channels.create();
-        ThreadLocal threadLocal = new ThreadLocal<String>();
+        ThreadLocal<String> threadLocal = new ThreadLocal<>();
         threadLocal.set("testThread");
 
         CompletableFuture<Object> readFuture = c.readAsync().thenApplyAsync(v ->
@@ -76,10 +76,10 @@ public class Executors {
         );
 
         threadLocal.set("beforeReadAsync");
-        CompletableFuture<Void> putFuture = c.putAsync("hello");
+        c.putAsync("hello");
         threadLocal.set("afterReadAsync");
 
         String result = (String)readFuture.get(1, TimeUnit.SECONDS);
-        Assert.assertEquals(result, null);
+        Assert.assertNull(result);
     }
 }

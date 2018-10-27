@@ -22,7 +22,7 @@ public class AltWritePortWrapper implements ReadPort {
     }
 
     @Override
-    public TakeResult take(Handler handler) {
+    public TakeResult take(Handler<Object> handler) {
         PutResult result = writePort.put(value, handler);
 
         if (result instanceof PutSucceeded) {
