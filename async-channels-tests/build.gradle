@@ -8,6 +8,9 @@ version '0.0.1-alpha'
 
 sourceCompatibility = 1.8
 
+tasks.signArchives.enabled = false
+tasks.uploadArchives.enabled = false
+
 repositories {
     mavenCentral()
 }

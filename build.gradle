@@ -1,7 +1,5 @@
 plugins {
     id 'java'
-    id 'maven'
-    id 'signing'
 }
 
 group 'io.github.matzoliv'
@@ -13,56 +11,62 @@ repositories {
     mavenCentral()
 }
 
-task sourcesJar(type: Jar) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
-}
+subprojects {
+    apply plugin: 'maven'
+    apply plugin: 'signing'
 
-artifacts {
-    archives sourcesJar
-}
+    task sourcesJar(type: Jar, dependsOn: classes) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
 
-signing {
-    sign configurations.archives
-}
+    signing {
+        sign configurations.archives
+    }
 
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+    artifacts {
+            archives jar
+            archives sourcesJar
+    }
 
-            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-                authentication(userName: ossrhUsername, password: ossrhPassword)
-            }
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
-            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-                authentication(userName: ossrhUsername, password: ossrhPassword)
-            }
-
-            pom.project {
-                name 'async-channels'
-                packaging 'jar'
-                description 'Implementation of Clojure\'s core.async channels for Java & Scala.'
-                url 'https://matzoliv.github.io/async-channels'
-
-                scm {
-                    connection 'scm:git:https://github.com/matzoliv/async-channels.git'
-                    developerConnection 'scm:git:https://github.com/matzoliv/async-channels.git'
-                    url 'https://github.com/matzoliv/async-channels'
+                repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                    authentication(userName: ossrhUsername, password: ossrhPassword)
                 }
 
-                licenses {
-                    license {
-                        name 'Eclipse Public License 1.0'
-                        url 'https://opensource.org/licenses/eclipse-1.0.php'
+                snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                    authentication(userName: ossrhUsername, password: ossrhPassword)
+                }
+
+                pom.project {
+                    name 'async-channels'
+                    packaging 'jar'
+                    description 'Implementation of Clojure\'s core.async channels for Java & Scala.'
+                    url 'https://matzoliv.github.io/async-channels'
+
+                    scm {
+                        connection 'scm:git:https://github.com/matzoliv/async-channels.git'
+                        developerConnection 'scm:git:ssh://github.com:matzoliv/async-channels.git'
+                        url 'https://github.com/matzoliv/async-channels'
                     }
-                }
 
-                developers {
-                    developer {
-                        id 'omatz'
-                        name 'Olivier Matz'
-                        email 'omatz@fastmail.com'
+                    licenses {
+                        license {
+                            name 'Eclipse Public License 1.0'
+                            url 'https://opensource.org/licenses/eclipse-1.0.php'
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id 'omatz'
+                            name 'Olivier Matz'
+                            email 'omatz@fastmail.com'
+                        }
                     }
                 }
             }
