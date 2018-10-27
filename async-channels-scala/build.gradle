@@ -3,7 +3,7 @@ plugins {
 }
 
 group 'io.github.matzoliv'
-version '0.1.0-alpha'
+version '0.0.1-alpha'
 
 sourceCompatibility = 1.8
 
@@ -14,5 +14,4 @@ repositories {
 dependencies {
     compile 'org.scala-lang:scala-library:2.12.4'
     implementation project(":async-channels-core")
-    testCompile group: 'junit', name: 'junit', version: '4.12'
 }
