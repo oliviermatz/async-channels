@@ -1,5 +1,7 @@
 plugins {
     id 'java'
+    id 'maven'
+    id 'signing'
 }
 
 group 'io.github.matzoliv'
@@ -10,3 +12,78 @@ sourceCompatibility = 1.8
 repositories {
     mavenCentral()
 }
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allJava
+    classifier = 'sources'
+}
+
+task javadocJar(type: Jar) {
+    from javadoc
+    classifier = 'javadoc'
+}
+
+signing {
+    sign configurations.archives
+}
+
+artifacts {
+    jar
+    archives(sourcesJar) {
+        type = 'jar'
+        classifier = 'sources'
+    }
+    archives(javadocJar) {
+        type = 'javadoc'
+    }
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            pom {
+                groupId = 'io.github.matzoliv'
+                artifactId = 'async-channels-core'
+                version = '0.0.1-alpha'
+
+                project {
+                    name = 'io.github.matzoliv'                    
+                    url 'https://matzoliv.github.io/async-channels'
+                    description 'async-channels-core'
+
+                    scm {
+                        connection 'scm:git:https://github.com/matzoliv/async-channels.git'
+                        developerConnection 'scm:git:ssh://github.com:matzoliv/async-channels.git'
+                        url 'https://github.com/matzoliv/async-channels'
+                    }
+
+                    licenses {
+                        license {
+                            name 'Eclipse Public License 1.0'
+                            url 'https://opensource.org/licenses/eclipse-1.0.php'
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id 'omatz'
+                            name 'Olivier Matz'
+                            email 'omatz@fastmail.com'
+                        }
+                    }                    
+                }
+            }
+
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+        }
+    }
+}
+
