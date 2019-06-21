@@ -24,6 +24,7 @@ task javadocJar(type: Jar) {
 }
 
 signing {
+    useGpgCmd()
     sign configurations.archives
 }
 
@@ -47,7 +48,7 @@ uploadArchives {
                 version = '0.0.1-alpha'
 
                 project {
-                    name = 'io.github.matzoliv'                    
+                    name = 'io.github.matzoliv'
                     url 'https://matzoliv.github.io/async-channels'
                     description 'async-channels-core'
 
@@ -70,7 +71,7 @@ uploadArchives {
                             name 'Olivier Matz'
                             email 'omatz@fastmail.com'
                         }
-                    }                    
+                    }
                 }
             }
 
@@ -86,4 +87,3 @@ uploadArchives {
         }
     }
 }
-

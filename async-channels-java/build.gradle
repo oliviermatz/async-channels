@@ -28,6 +28,7 @@ task javadocJar(type: Jar) {
 }
 
 signing {
+    useGpgCmd()
     sign configurations.archives
 }
 
